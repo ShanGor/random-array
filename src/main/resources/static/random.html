@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Random</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+</head>
+<body>
+<div id="app" class="container">
+    <h1 style="padding-top: 2em; padding-bottom: 1em">Random square array generator</h1>
+    <div>
+        <label>Please select the size of your square: </label>
+        <select v-model="size" v-on:change="hey">
+            <option disabled value="0">Please Choose</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+            <option>9</option>
+            <option>10</option>
+        </select>
+        <button v-on:click="hey">Regenerate</button>
+    </div>
+    <table class="table">
+        <tr v-for="row in num_array">
+            <td v-for="col in row">{{col}}</td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            size: 0,
+            num_array: [[]]
+        },
+        methods: {
+            hey: function() {
+                if (this.size < 2) {
+                    alert("Please choose a correct size");
+                    return false;
+                }
+                this.$http.get('/shuffle-square/' + this.size).then(response => {
+                    // get body data
+                    this.num_array = response.body;
+                    }, response => {
+                    alert(response.body);
+                });
+            }
+        }
+    })
+</script>
+</body>
+</html>
